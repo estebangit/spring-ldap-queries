@@ -34,21 +34,21 @@ public class MainRESTController {
         return "Welcome to RestTemplate Example.";
     }
 
-    @Secured({"ROLE_developers"})
+    @Secured({"ROLE_DEVELOPERS"})
     @RequestMapping("/ping")
     @ResponseBody
     public String ping() {
         return "ok user";
     }
 
-    @Secured({"ROLE_managers"})
+    @Secured({"ROLE_MANAGERS"})
     @RequestMapping("/pingadmin")
     @ResponseBody
     public String pingAdmin() {
         return "ok admin";
     }
 
-    @Secured({"ROLE_developers"})
+    @Secured({"ROLE_DEVELOPERS"})
     @RequestMapping(value = "/users")
     @ResponseBody
     public List<String> getEmployees() {
