@@ -19,6 +19,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private AuthenticationEntryPoint authEntryPoint;
 
@@ -35,40 +36,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
-
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//
-//        String password = "123";
-//
-//        String encrytedPassword = this.passwordEncoder().encode(password);
-//        System.out.println("Encoded password of 123=" + encrytedPassword);
-//
-//        InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> //
-//                mngConfig = auth.inMemoryAuthentication();
-//        // Defines 2 users, stored in memory.
-//        // ** Spring BOOT >= 2.x (Spring Security 5.x)
-//        // Spring auto add ROLE_
-//        UserDetails u1 = User.withUsername("toto").password(encrytedPassword).roles("developers").build();
-//        UserDetails u2 = User.withUsername("admin").password(encrytedPassword).roles("managers").build();
-//        UserDetails u3 = User.withUsername("other").password(encrytedPassword).roles("OTHER").build();
-//
-//        mngConfig.withUser(u1);
-//        mngConfig.withUser(u2);
-//        mngConfig.withUser(u3);
-//    }
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .ldapAuthentication()
-                .userDnPatterns("uid={0},ou=people")
-                .groupSearchBase("ou=groups")
+                .userDnPatterns("cn={0},ou=people,dc=example,dc=com")
+                //.userDnPatterns("uid={0},ou=people")
+                .groupSearchBase("ou=groups,dc=example,dc=com")
+                //.groupSearchBase("ou=groups")
                 .contextSource()
-                .url("ldap://localhost:8389/dc=example,dc=com")
+                .url("ldap://localhost:8389/")
+                //.url("ldap://localhost:8389/dc=example,dc=com")
                 .and()
                 .passwordCompare()
                 .passwordEncoder(new LdapShaPasswordEncoder())

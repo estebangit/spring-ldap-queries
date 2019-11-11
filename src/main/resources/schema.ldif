@@ -21,7 +21,7 @@ objectclass: organizationalUnit
 ou: users
 
 # Create People
-dn: uid=john,ou=people,dc=example,dc=com
+dn: cn=john,ou=people,dc=example,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -31,7 +31,7 @@ sn: John
 uid: john
 password: secret
 
-dn: uid=jihn,ou=people,dc=example,dc=com
+dn: cn=jihn,ou=people,dc=example,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -41,7 +41,7 @@ sn: Jihn
 uid: jihn
 password: secret
 
-dn: uid=jahn,ou=people,dc=example,dc=com
+dn: cn=jahn,ou=people,dc=example,dc=com
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
@@ -57,15 +57,15 @@ objectclass: top
 objectclass: groupOfUniqueNames
 cn: developers
 ou: developer
-uniqueMember: uid=john,ou=people,dc=example,dc=com
-uniqueMember: uid=jihn,ou=people,dc=example,dc=com
+uniqueMember: cn=john,ou=people,dc=example,dc=com
+uniqueMember: cn=jihn,ou=people,dc=example,dc=com
 
 dn: cn=managers,ou=groups,dc=example,dc=com
 objectclass: top
 objectclass: groupOfUniqueNames
 cn: managers
 ou: manager
-uniqueMember: uid=jahn,ou=people,dc=example,dc=com
+uniqueMember: cn=jahn,ou=people,dc=example,dc=com
 
 #
 dn: cn=TEST03,ou=users,dc=example,dc=com

@@ -17,7 +17,7 @@ spring:
     embedded:
       base-dn: dc=example,dc=com
       credential:
-        username: uid=admin
+        username: cn=admin
         password: secret
       ldif: classpath:schema.ldif
       url: ldap://localhost:8389/

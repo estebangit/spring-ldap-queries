@@ -37,7 +37,7 @@ public class PersonRepository {
                 .where("objectclass").is("person")
                 .and("sn").not().is(lastName)
                 .and("sn").like("j*hn")
-                .and("uid").isPresent();
+                .and("cn").isPresent();
 
         return ldapTemplate.search(query, new PersonAttributesMapper());
     }
