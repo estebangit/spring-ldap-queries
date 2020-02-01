@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * from https://memorynotfound.com/spring-boot-spring-ldap-advanced-ldap-queries-example/
  */
 @SpringBootApplication
-@EnableCaching //enables Spring Caching functionality
+@EnableCaching // enables Spring Caching functionality
 @EnableScheduling
 public class Application {
 

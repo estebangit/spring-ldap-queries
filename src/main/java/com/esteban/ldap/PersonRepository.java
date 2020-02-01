@@ -40,7 +40,7 @@ public class PersonRepository {
                 .searchScope(SearchScope.SUBTREE)
                 .timeLimit(THREE_SECONDS)
                 .countLimit(10)
-                .attributes("cn")
+                .attributes("cn", "sn")
                 .base(LdapUtils.emptyLdapName())
                 .where("objectclass").is("person")
                 .and("sn").not().is(lastName)
@@ -58,7 +58,7 @@ public class PersonRepository {
         sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
         sc.setTimeLimit(THREE_SECONDS);
         sc.setCountLimit(10);
-        sc.setReturningAttributes(new String[]{"cn"});
+        sc.setReturningAttributes(new String[]{"cn", "sn"});
 
         String filter = "(&(objectclass=person)(sn=" + lastName + "))";
         return ldapTemplate.search(LdapUtils.emptyLdapName(), filter, sc, new PersonAttributesMapper());
@@ -70,7 +70,7 @@ public class PersonRepository {
         sc.setSearchScope(SearchControls.SUBTREE_SCOPE);
         sc.setTimeLimit(THREE_SECONDS);
         sc.setCountLimit(10);
-        sc.setReturningAttributes(new String[]{"cn"});
+        sc.setReturningAttributes(new String[]{"cn", "sn"});
 
         AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter("objectclass", "person"));
