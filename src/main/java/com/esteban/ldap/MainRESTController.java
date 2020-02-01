@@ -1,12 +1,9 @@
 package com.esteban.ldap;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api")
+@Slf4j
 public class MainRESTController {
 
     // logged
@@ -27,6 +25,9 @@ public class MainRESTController {
 
     // admin : admin
     // http://localhost:8080/api/pingadmin
+
+    @Autowired
+    private PersonRepository personRepo;
 
     @RequestMapping("/")
     @ResponseBody
@@ -56,6 +57,17 @@ public class MainRESTController {
         list.add("Tom");
         list.add("Jerry");
         return list;
+    }
+
+    @Secured({"ROLE_DEVELOPERS"})
+    @RequestMapping("/person")
+    @ResponseBody
+    public List<Person> getPersonNamesByLastName() {
+        long start = System.currentTimeMillis();
+        List<Person> result = personRepo.getPersonNamesByLastName("toto");
+        long stop = System.currentTimeMillis();
+        log.info("Done in {}ms", (stop - start));
+        return result;
     }
 
 }
