@@ -89,7 +89,7 @@ public class PersonRepository {
         }
     }
 
-    @Scheduled(fixedRate = 6000)
+    @Scheduled(fixedRate = 6000, initialDelay = 10000)
     @CacheEvict(cacheNames = "persons", allEntries = true)
     public void evictAllcaches() {
         log.info("Flush caches!");
