@@ -70,8 +70,7 @@ public class PersonRepository {
 
     public void createPerson(Person person) {
         String password = "secret";
-        Name dn = LdapNameBuilder
-                .newInstance()
+        Name dn = LdapNameBuilder.newInstance()
                 .add("dc", "com")
                 .add("dc", "example")
                 .add("ou", "users")
@@ -79,36 +78,29 @@ public class PersonRepository {
                 .build();
         DirContextAdapter context = new DirContextAdapter(dn);
 
-        context.setAttributeValues(
-                "objectclass",
-                new String[]
-                        {"top",
-                                "person",
-                                "organizationalPerson",
-                                "inetOrgPerson"});
-        context.setAttributeValue("cn", person.getFullName().toLowerCase());
-        context.setAttributeValue("sn", person.getLastName().toLowerCase());
+        context.setAttributeValues("objectclass", new String[]{"top", "person", "organizationalPerson", "inetOrgPerson"});
+        context.setAttributeValue("cn", person.getFullName() + ' ' + person.getLastName());
+        context.setAttributeValue("sn", person.getLastName());
+        context.setAttributeValue("uid", person.getLastName().toLowerCase());
         context.setAttributeValue("userPassword", password);
 
         ldapTemplate.bind(context);
     }
 
-    public void modify(String username, String password) {
+    public void modify(Person person) {
+        String password = "secret";
         Name dn = LdapNameBuilder.newInstance()
+                .add("dc", "com")
+                .add("dc", "example")
                 .add("ou", "users")
-                .add("cn", username)
+                .add("cn", person.getLastName().toLowerCase())
                 .build();
         DirContextOperations context = ldapTemplate.lookupContext(dn);
 
-        context.setAttributeValues
-                ("objectclass",
-                        new String[]
-                                {"top",
-                                        "person",
-                                        "organizationalPerson",
-                                        "inetOrgPerson"});
-        context.setAttributeValue("cn", username);
-        context.setAttributeValue("sn", username);
+        context.setAttributeValues("objectclass", new String[]{"top", "person", "organizationalPerson", "inetOrgPerson"});
+        context.setAttributeValue("cn", person.getFullName() + ' ' + person.getLastName());
+        context.setAttributeValue("sn", person.getLastName());
+        context.setAttributeValue("uid", person.getLastName().toLowerCase());
         context.setAttributeValue("userPassword", password);
 
         ldapTemplate.modifyAttributes(context);

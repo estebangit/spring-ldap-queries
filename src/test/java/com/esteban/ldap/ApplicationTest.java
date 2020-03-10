@@ -45,10 +45,15 @@ public class ApplicationTest {
 
     @Test
     public void testCreatePeople() {
+        // create
         Person person = new Person("toto", "titi");
         personRepository.createPerson(person);
-
         List<Person> names = personRepository.getPersonNamesByLastName2("titi");
+        log.info("names: " + names);
+        // modify
+        person = new Person("toto2", "titi");
+        personRepository.modify(person);
+        names = personRepository.getPersonNamesByLastName2("titi");
         log.info("names: " + names);
     }
 
