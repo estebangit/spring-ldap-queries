@@ -43,4 +43,13 @@ public class ApplicationTest {
         log.info("groups: " + groups);
     }
 
+    @Test
+    public void testCreatePeople() {
+        Person person = new Person("toto", "titi");
+        personRepository.createPerson(person);
+
+        List<Person> names = personRepository.getPersonNamesByLastName2("titi");
+        log.info("names: " + names);
+    }
+
 }

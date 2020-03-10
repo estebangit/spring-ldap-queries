@@ -6,15 +6,19 @@ import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.DirContextAdapter;
+import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.query.LdapQuery;
 import org.springframework.ldap.query.SearchScope;
+import org.springframework.ldap.support.LdapNameBuilder;
 import org.springframework.ldap.support.LdapUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.naming.Name;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -62,6 +66,52 @@ public class PersonRepository {
 
         String filter = "(&(objectclass=person)(sn=" + lastName + "))";
         return ldapTemplate.search(LdapUtils.emptyLdapName(), filter, sc, new PersonAttributesMapper());
+    }
+
+    public void createPerson(Person person) {
+        String password = "secret";
+        Name dn = LdapNameBuilder
+                .newInstance()
+                .add("dc", "com")
+                .add("dc", "example")
+                .add("ou", "users")
+                .add("cn", person.getLastName().toLowerCase())
+                .build();
+        DirContextAdapter context = new DirContextAdapter(dn);
+
+        context.setAttributeValues(
+                "objectclass",
+                new String[]
+                        {"top",
+                                "person",
+                                "organizationalPerson",
+                                "inetOrgPerson"});
+        context.setAttributeValue("cn", person.getFullName().toLowerCase());
+        context.setAttributeValue("sn", person.getLastName().toLowerCase());
+        context.setAttributeValue("userPassword", password);
+
+        ldapTemplate.bind(context);
+    }
+
+    public void modify(String username, String password) {
+        Name dn = LdapNameBuilder.newInstance()
+                .add("ou", "users")
+                .add("cn", username)
+                .build();
+        DirContextOperations context = ldapTemplate.lookupContext(dn);
+
+        context.setAttributeValues
+                ("objectclass",
+                        new String[]
+                                {"top",
+                                        "person",
+                                        "organizationalPerson",
+                                        "inetOrgPerson"});
+        context.setAttributeValue("cn", username);
+        context.setAttributeValue("sn", username);
+        context.setAttributeValue("userPassword", password);
+
+        ldapTemplate.modifyAttributes(context);
     }
 
     public List<Person> getPersonNamesByLastName3(String lastName) {
